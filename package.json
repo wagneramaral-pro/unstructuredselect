@@ -1,0 +1,19 @@
+{
+  "name": "unstructuredselect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mocha": "^5.2.0",
+    "react": "^16.4.2"
+  },
+  "devDependencies": {
+    "enzyme": "^3.4.4",
+    "jest": "^23.5.0"
+  }
+}
