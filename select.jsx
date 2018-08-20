@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class UnstructuredSelect extends Component {
+export default class UnstructuredSelect extends Component {
   constructor(props){
     super(props);
     this.state={};
