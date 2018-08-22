@@ -14,7 +14,7 @@ export default class UnstructuredSelect extends Component {
       return {
         index: idx,
         value: optionObject.value,
-        lable: optionObject.value
+        label: optionObject.value
       }
     });
     this.setState({
