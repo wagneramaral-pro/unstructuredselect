@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+const deepEqual = require('fast-deep-equal');
 
 export default class UnstructuredSelect extends Component {
   constructor(props){
@@ -14,17 +15,34 @@ export default class UnstructuredSelect extends Component {
       return {
         index: idx,
         value: optionObject.value,
-        label: optionObject.value
+        label: optionObject.label || optionObject.value
       }
     });
-    this.setState({
-      options: optionsObject
-    });
+    // if no default value passed in dont set a default value 
+    let defaultValue = this.props.defaultValue
+    if (!defaultValue){
+      this.setState({
+        options: optionsObject
+      });
+    }
+    // if default value prop doesn't match the value of an option passed in raise an error
+    else if (!defaultValue || !this.props.options.find((option)=>{ return deepEqual(option.value, this.props.defaultValue)})) {
+      throw Error("Default value must be in options")
+    }
+    else {
+      this.setState({
+        options: optionsObject,
+        value: defaultValue
+      });
+    }
   }
 
   // Use the object in state of complex types and the index to convert the options value (which is an index) into the appropriate complex value
   onChange(event){
-    const value = this.state.options.filter((option)=>{return option.index===event.target.value})[0].value;
+    const value = this.state.options.find((option)=>{return option.index===event.target.value}).value
+    this.setState({
+
+    })
     this.props.onChange(value)
   }
 
@@ -33,12 +51,13 @@ export default class UnstructuredSelect extends Component {
     else{
       return(
         <select
+          value={this.state.value}
           onChange={this.onChange}
         >
         {
           this.state.options.map((option)=>{
             return(
-              <option value={option.index}>{option.label}</option>
+              <option key={option.index} value={option.index}>{option.label}</option>
             )
           })
         }
@@ -47,8 +66,10 @@ export default class UnstructuredSelect extends Component {
     }
   }
   render(){
-    <div>
-     {this.renderOptions()}
-    </div>
+    return(
+      <div>
+        {this.renderOptions()}
+     </div>
+    )
   }
 }

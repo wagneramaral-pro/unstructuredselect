@@ -11,9 +11,11 @@
   "dependencies": {
     "babel-jest": "^23.4.2",
     "babel-preset-env": "^1.7.0",
+    "fast-deep-equal": "^2.0.1",
     "mocha": "^5.2.0",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "react-dom": "^16.4.2",
+    "sinon": "^6.1.5"
   },
   "devDependencies": {
     "babel-preset-react": "^6.24.1",
