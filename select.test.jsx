@@ -42,17 +42,32 @@ test('onChange calls onChange from props with correct argument', () => {
 });
 
 test('onChange sets the value in state correctly', ()=>{
-
+    const onChangeSpy = sinon.spy();
+    const component = shallow(<UnstructuredSelect options={options} onChange={onChangeSpy}/>);
+    component.instance().componentDidMount();
+    const event = {
+        target: {
+            value: 1
+        }
+    };
+    component.instance().onChange(event);
+    expect(component.state().value).toEqual({testObj: 'objValue'});
 });
 
 test('componentDidMount sets value to undefined if not passed a value', ()=>{
-
+    const component = shallow(<UnstructuredSelect options={options}/>);
+    component.instance().componentDidMount();
+    expect(component.state().value).toEqual(undefined);
 });
 
 test('componentDidMount sets value to defaultValue from props if passed a value', ()=>{
-
+    const component = shallow(<UnstructuredSelect options={options} defaultValue={[1,2,3]}/>);
+    component.instance().componentDidMount();
+    expect(component.state().value).toEqual([1, 2, 3]);
 })
 
 test('componentDidMount throws an error if a default value is passed in that is not in the options passed in', ()=>{
-    
-})
+    const component = shallow(<UnstructuredSelect options={options}/>);
+    component.instance().componentDidMount();
+    expect(component.state().value).toEqual(undefined);
+})  
