@@ -76,7 +76,7 @@ export default class UnstructuredSelect extends Component {
       return(
         <select
           value={this.state.value}
-          onChange={this.onChangeProxy}
+          onChange={this.onChange}
           {...this.getAdditionalAttributes()}
         >
         {
