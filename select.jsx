@@ -32,19 +32,43 @@ export default class UnstructuredSelect extends Component {
     else {
       this.setState({
         options: optionsObject,
-        value: defaultValue
+        value: this.isMultiple() ? [...defaultValue] : defaultValue
       });
     }
   }
 
   // Use the object in state of complex types and the index to convert the options value (which is an index) into the appropriate complex value
   onChange(event){
-    const value = this.state.options.find((option)=>{return option.index===event.target.value}).value
+    let value = []
+
+    if (this.isMultiple()) {
+      const selectedValues = [...event.target.selectedOptions].map(obj => obj.value)
+
+      const previousValues = this.state.value || []
+      value.push(...previousValues)
+
+      const newValues = this.state.options.filter((option)=>{return selectedValues.includes(option.index)}).map(obj => obj.value)
+      value.push(...newValues)
+    } else {
+      value = this.state.options.find((option)=>{return option.index===event.target.value}).value
+    }
+
     this.setState({
       value
     })
     this.props.onChange(value)
   }
+
+  isMultiple(){
+    return this.props.multiple
+  }
+
+  getAdditionalAttributes(){ // so far just 'multiple' attribute
+    if (this.props.multiple) {
+      return { "multiple": true }
+    }
+    return {}
+  };
 
   renderOptions(){
     if (!this.state.options) return <div />
@@ -52,7 +76,8 @@ export default class UnstructuredSelect extends Component {
       return(
         <select
           value={this.state.value}
-          onChange={this.onChange}
+          onChange={this.onChangeProxy}
+          {...this.getAdditionalAttributes()}
         >
         {
           this.state.options.map((option)=>{
