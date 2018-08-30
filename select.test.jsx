@@ -85,13 +85,15 @@ test('onChange sets the value in state correctly when multiple is passed in', ()
     const onChangeSpy = sinon.spy();
     const component = shallow(<UnstructuredSelect multiple={true} onChange={onChangeSpy} options={options}/>);
     const valuesToSelect = [0, 1]
+    const selectedValues = []
     valuesToSelect.forEach((value) => {
       let event = {
         target: {
-            selectedOptions:[{value}]
+            selectedOptions:[...selectedValues, {value}]
         }
       };
       component.instance().onChange(event);
+      selectedValues.push({value})
     })
     expect(component.state().value).toEqual(options.filter((option, index) => valuesToSelect.includes(index)).map(obj => obj.value));
 })

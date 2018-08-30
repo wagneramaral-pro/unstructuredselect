@@ -41,14 +41,9 @@ export default class UnstructuredSelect extends Component {
   onChange(event){
     let value = []
 
-    if (this.isMultiple()) {
+    if (this.isMultiple()) {      
       const selectedValues = [...event.target.selectedOptions].map(obj => obj.value)
-
-      const previousValues = this.state.value || []
-      value.push(...previousValues)
-
-      const newValues = this.state.options.filter((option)=>{return selectedValues.includes(option.index)}).map(obj => obj.value)
-      value.push(...newValues)
+      value = this.state.options.filter((option)=>{return selectedValues.includes(option.index)}).map(obj => obj.value)
     } else {
       value = this.state.options.find((option)=>{return option.index===event.target.value}).value
     }
