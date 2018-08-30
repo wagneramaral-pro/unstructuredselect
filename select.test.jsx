@@ -61,13 +61,14 @@ test('componentDidMount sets value to undefined if not passed a value', ()=>{
 });
 
 test('componentDidMount sets value to defaultValue from props if passed a value', ()=>{
-    const component = shallow(<UnstructuredSelect options={options} defaultValue={[1,2,3]}/>);
+    const defaultValue = ['cats', 'dogs']
+    const component = shallow(<UnstructuredSelect options={options} defaultValue={defaultValue}/>);
     component.instance().componentDidMount();
-    expect(component.state().value).toEqual([1, 2, 3]);
+    expect(component.state().value).toEqual(defaultValue);
 })
 
 test('componentDidMount throws an error if a default value is passed in that is not in the options passed in', ()=>{
-    const component = shallow(<UnstructuredSelect options={options}/>);
-    component.instance().componentDidMount();
-    expect(component.state().value).toEqual(undefined);
+    const defaultValue = { 'over': '9000' }
+    const component = shallow(<UnstructuredSelect defaultValue={defaultValue} options={options}/>, {disableLifecycleMethods:true});
+    expect(() => component.instance.componentDidMount()).toThrow();
 })  
