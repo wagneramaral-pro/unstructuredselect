@@ -26,7 +26,7 @@ export default class UnstructuredSelect extends Component {
       });
     }
     // if default value prop doesn't match the value of an option passed in raise an error
-    else if (!defaultValue || !this.props.options.find((option)=>{ return deepEqual(option.value, this.props.defaultValue)})) {
+    else if (!this.props.options.find((option)=>{ return deepEqual(option.value, this.props.defaultValue)})) {
       throw Error("Default value must be in options")
     }
     else {
@@ -41,7 +41,7 @@ export default class UnstructuredSelect extends Component {
   onChange(event){
     const value = this.state.options.find((option)=>{return option.index===event.target.value}).value
     this.setState({
-
+      value
     })
     this.props.onChange(value)
   }
