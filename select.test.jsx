@@ -83,17 +83,33 @@ test('multiple prop successfully adds multiple attribute to select', ()=>{
 
 test('onChange sets the value in state correctly when multiple is passed in', ()=>{
     const onChangeSpy = sinon.spy();
-    const component = shallow(<UnstructuredSelect multiple={true} onChange={onChangeSpy} options={options}/>);
+    const component = shallow(<UnstructuredSelect multiple={true} options={options} onChange={onChangeSpy}/>);
+    component.instance().componentDidMount();
     const valuesToSelect = [0, 1]
     const selectedValues = []
     valuesToSelect.forEach((value) => {
       let event = {
         target: {
-            selectedOptions:[...selectedValues, {value}]
+          selectedOptions:[...selectedValues, {value}]
         }
       };
       component.instance().onChange(event);
       selectedValues.push({value})
     })
     expect(component.state().value).toEqual(options.filter((option, index) => valuesToSelect.includes(index)).map(obj => obj.value));
+})
+
+test('element attributes are being set properly', ()=>{
+  const form = "testForm"
+  const autofocus = true
+  const disabled = true
+
+  const component = shallow(<UnstructuredSelect autofocus={autofocus} disabled={disabled} form={form} options={options}/>);
+  component.instance().componentDidMount();
+    expect(component.find('select').filterWhere((item) => {
+        const isAutofocus = item.prop('autofocus') === autofocus;
+        const isDisabled = item.prop('disabled') === disabled;
+        const isProperForm = item.prop('form') === form;
+        return isAutofocus && isDisabled && isProperForm;
+      }).length).not.toBe(0);
 })

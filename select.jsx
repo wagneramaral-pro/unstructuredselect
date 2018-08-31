@@ -58,11 +58,21 @@ export default class UnstructuredSelect extends Component {
     return this.props.multiple
   }
 
-  getAdditionalAttributes(){ // so far just 'multiple' attribute
+  getAdditionalAttributes(){
+    const attributeObj = {}
     if (this.props.multiple) {
-      return { "multiple": true }
+      attributeObj.multiple = true
     }
-    return {}
+    if (this.props.autofocus) {
+      attributeObj.autofocus = true
+    }
+    if (this.props.disabled) {
+      attributeObj.disabled = true
+    }
+    if (this.props.form) {
+      attributeObj.form = this.props.form
+    }
+    return attributeObj
   };
 
   renderOptions(){
