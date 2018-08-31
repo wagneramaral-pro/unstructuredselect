@@ -71,4 +71,29 @@ test('componentDidMount throws an error if a default value is passed in that is 
     const defaultValue = { 'over': '9000' }
     const component = shallow(<UnstructuredSelect defaultValue={defaultValue} options={options}/>, {disableLifecycleMethods:true});
     expect(() => component.instance.componentDidMount()).toThrow();
-})  
+})
+
+test('multiple prop successfully adds multiple attribute to select', ()=>{
+    const component = shallow(<UnstructuredSelect multiple={true} options={options}/>);
+    component.instance().componentDidMount();
+    expect(component.find('select').filterWhere((item) => {
+        return item.prop('multiple') === true;
+      }).length).not.toBe(0);
+})
+
+test('onChange sets the value in state correctly when multiple is passed in', ()=>{
+    const onChangeSpy = sinon.spy();
+    const component = shallow(<UnstructuredSelect multiple={true} onChange={onChangeSpy} options={options}/>);
+    const valuesToSelect = [0, 1]
+    const selectedValues = []
+    valuesToSelect.forEach((value) => {
+      let event = {
+        target: {
+            selectedOptions:[...selectedValues, {value}]
+        }
+      };
+      component.instance().onChange(event);
+      selectedValues.push({value})
+    })
+    expect(component.state().value).toEqual(options.filter((option, index) => valuesToSelect.includes(index)).map(obj => obj.value));
+})
