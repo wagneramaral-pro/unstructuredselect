@@ -10,7 +10,7 @@ export default class UnstructuredSelect extends Component {
   }
 
   // on mount construct an object that includes options labels and a value of any type 
-  componentDidMount(){
+  componentWillMount(){
     const optionsObject = this.props.options.map((optionObject, idx)=>{
       return {
         index: idx,
@@ -24,17 +24,20 @@ export default class UnstructuredSelect extends Component {
       this.setState({
         options: optionsObject
       });
+      return;
     }
     // if default value prop doesn't match the value of an option passed in raise an error
-    else if (!this.props.options.find((option)=>{ return deepEqual(option.value, this.props.defaultValue)})) {
-      throw Error("Default value must be in options")
+    if (!this.props.options.find((option)=>{ return deepEqual(option.value, this.props.defaultValue)})) {
+      throw Error("Default value must be in options");
     }
-    else {
-      this.setState({
-        options: optionsObject,
-        value: this.isMultiple() ? [...defaultValue] : defaultValue
-      });
+    if (this.isMultiple()) {
+      // if defaultValue is a string it should not be destructured even if isMultiple
+      defaultValue = typeof defaultValue === 'string' ? [defaultValue] : [...defaultValue];
     }
+    this.setState({
+      options: optionsObject,
+      value: defaultValue
+    });
   }
 
   // Use the object in state of complex types and the index to convert the options value (which is an index) into the appropriate complex value
