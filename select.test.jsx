@@ -8,24 +8,25 @@ import sinon from 'sinon';
 
 const options = [
     {value: ['cats', 'dogs'], label: 'cats and dogs'},
-    {value: {testObj: 'objValue'}, label: 'testObj'}
+    {value: {testObj: 'objValue'}, label: 'testObj'},
+    {value: 'testPrimitive', label:'testPrimitive'}
 ]; 
 
 test('renders options', ()=>{
     const component = shallow(<UnstructuredSelect options={options} />);
     component.instance().componentDidMount();
-    expect(component.find('option').length).toBe(2);
+    expect(component.find('option').length).toBe(3);
 });
 
 test('Sets state to object with index value and label ', ()=>{
     const component = shallow(<UnstructuredSelect options={options} />);
     component.instance().componentDidMount();
-    const expectedState = {
-        options: [
-            {index: 1, value: 'cats', label: 'cats'}
-        ]
-    };
-    expect(component.find('option').length).toBe(2);
+    const expectedState = [
+            {index:0, value: ['cats', 'dogs'], label: 'cats and dogs'},
+            {index:1, value: {testObj: 'objValue'}, label: 'testObj'},
+            {index:2, value: 'testPrimitive', label:'testPrimitive'}
+    ]
+    expect(component.state().options).toEqual(expectedState);
 });
 
 test('onChange calls onChange from props with correct argument', () => {
@@ -79,6 +80,15 @@ test('multiple prop successfully adds multiple attribute to select', ()=>{
     expect(component.find('select').filterWhere((item) => {
         return item.prop('multiple') === true;
       }).length).not.toBe(0);
+})
+
+test('multiple prop defaultValue ', ()=>{
+    const component = shallow(<UnstructuredSelect defaultValue={'testPrimitive'} multiple={true} options={options}/>);
+    component.instance().componentDidMount();
+    expect(component.find('select').filterWhere((item) => {
+        return item.prop('multiple') === true;
+      }).length).not.toBe(0);
+    expect(component.state().value).toEqual(['testPrimitive']);
 })
 
 test('onChange sets the value in state correctly when multiple is passed in', ()=>{
