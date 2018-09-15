@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest"
   },
-  "author": "",
+  "author": "Chad Henley",
   "license": "ISC",
   "dependencies": {
     "babel-jest": "^23.4.2",
