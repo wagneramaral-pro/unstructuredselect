@@ -1,2 +1,2 @@
-const UnstructuredSelect = require('./select');
+const UnstructuredSelect = require('./select.jsx');
 exports.UnstructuredSelect = UnstructuredSelect;
